@@ -1,0 +1,118 @@
+Zero-to-Hero: Google Go with Henry Schein
+16 Feb 2018
+
+Tim Cooper
+Henry Schein
+tim.cooper@layeh.com
+https://layeh.com
+
+: TODO: export slides to HTML, provide link
+
+* Agenda
+
+- What is Go?
+- What does it look like?
+- Demonstrations of libraries
+- Write some Go!
+
+* What is Go?
+
+: 2009 by Google
+: Designed by those with a history of language design. Picked things they enjoyed from other languages and included them in Go.
+: Since its release, popular among backend and system service engineers
+
+: Example projects that use Go: Docker and k8s
+
+: Static typed
+: Strong typed, no implicit type conversions
+: Good standard library - JSON, TLS, Database, HTTP
+: Statically linked
+: Built-in testing and benchmarking support
+: Concurrent execution, lightweight threads
+
+.image gopher.png _ 420
+
+* "Hello World"
+
+.play 01-basic/main.go
+
+* Concurrency
+
+.play 01-concurrency/main.go
+
+* Interested in language design?
+
+.link https://golang.org/ref/spec
+
+.image spec.png _ 1000
+
+* Library demos
+
+* HTTP
+
+.play 02-http/main.go
+
+* HTTP (serve content)
+
+.play 03-http-html/main.go
+
+* HTTP (handle form)
+
+.code 04-http-form/static/index.html /<form/,/<\/form>/
+
+.play 04-http-form/main.go /START OMIT/,/END OMIT/
+
+* HTTP (WebSocket)
+
+.play 05-http-websocket/main.go /START OMIT/,/END OMIT/
+
+* Database access
+
+.play 06-database/main.go /START OMIT/,/END OMIT/
+
+* P2P communication
+
+.code 07-p2p/main.go /START OMIT/,/END OMIT/
+
+* Site scraping
+
+.play 08-scraping/main.go /START OMIT/,/END OMIT/
+
+* Helpful Go resources
+
+- [[https://tour.golang.org]]
+
+Step-by-step interactive Go tutorial
+
+- [[https://gobyexample.com]]
+
+Examples of common actions in Go
+
+- [[https://learnxinyminutes.com/docs/go]]
+
+"Cheatsheet", helpful if comfortable in other languages
+
+- [[https://godoc.org]]
+
+Web-based documentation viewer for built-in and 3rd-party Go packages
+
+* Installation instructions (version 1.8+ recommended)
+
+- Windows and OS X: [[https://golang.org/dl]]
+
+- Ubuntu: [[https://golang.org/wiki/Ubuntu]] (may have to update `$PATH`)
+
+- Other Linux: check your distro's package repository
+
+You'll also need `git` to download 3rd-party packages:
+
+- Windows and OS X: [[https://git-scm.com]]
+- Linux: check your distro's package repository
+
+Verify your installation by running:
+
+  %  go version
+  go version go1.9.4 linux/amd64
+
+  %  git version
+  git version 2.7.4
