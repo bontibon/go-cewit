@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<!-- saved from url=(0053)http://127.0.0.1:3999/presentation-2018-02-16.slide#1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Zero-to-Hero: Google Go with Henry Schein</title>
+    
+    <script>
+      var notesEnabled =  false ;
+    </script>
+    <script src="./index_files/slides.js"></script>
+
+    
+
+    <script>
+      
+      if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+        var _gaq = _gaq || [];
+        _gaq.push(["_setAccount", "UA-11222381-6"]);
+        _gaq.push(["b._setAccount", "UA-49880327-6"]);
+        window.trackPageview = function() {
+          _gaq.push(["_trackPageview", location.pathname+location.hash]);
+          _gaq.push(["b._trackPageview", location.pathname+location.hash]);
+        };
+        window.trackPageview();
+        window.trackEvent = function(category, action, opt_label, opt_value, opt_noninteraction) {
+          _gaq.push(["_trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+          _gaq.push(["b._trackEvent", category, action, opt_label, opt_value, opt_noninteraction]);
+        };
+      }
+    </script>
+  <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"><meta name="apple-mobile-web-app-capable" content="yes"></head>
+
+  <body style="display: none" class="loaded">
+
+    <section class="slides layout-widescreen" style="transform: scale(0.904);">
+
+      <article class="current">
+        <h1>Zero-to-Hero: Google Go with Henry Schein</h1>
+        
+        <h3>16 February 2018</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Tim Cooper
+  </p>
+  
+
+  
+  <p>
+    Henry Schein
+  </p>
+  
+
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+  
+  
+      <article class="next">
+      
+        <h3>Agenda</h3>
+        
+  <ul>
+  
+    <li>What is Go?</li>
+  
+    <li>What does it look like?</li>
+  
+    <li>Demonstrations of libraries</li>
+  
+    <li>Write some Go!</li>
+  
+    <li>Slides are here: <a href="https://bontibon.github.io/go-cewit" target="_blank">bontibon.github.io/go-cewit</a></li>
+  
+  </ul>
+
+      
+      </article>
+  
+  
+  
+      <article class="far-next">
+      
+        <h3>What is Go?</h3>
+        
+<div class="image">
+  <img src="./index_files/gopher.png" width="420">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>"Hello World"</h3>
+        
+  <div class="code playground">
+
+
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">)</span>
+<span num="6"></span>
+<span num="7">func main() {</span>
+<span num="8">    fmt.Println("Hello, CEWIT")</span>
+<span num="9">}</span>
+</pre>
+
+
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Concurrency</h3>
+        
+  <div class="code playground">
+
+
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "strings"</span>
+<span num="6">    "sync"</span>
+<span num="7">    "time"</span>
+<span num="8">)</span>
+<span num="9"></span>
+<span num="10">func ProcessString(wg *sync.WaitGroup, s string) {</span>
+<span num="11">    time.Sleep(time.Millisecond * 333) // Perform some blocking operation</span>
+<span num="12">    fmt.Println(strings.ToUpper(s))</span>
+<span num="13">    wg.Done()</span>
+<span num="14">}</span>
+<span num="15"></span>
+<span num="16">func main() {</span>
+<span num="17">    var wg sync.WaitGroup</span>
+<span num="18">    items := []string{"hotel", "alpha", "charlie", "kilo"}</span>
+<span num="19">    for _, item := range items {</span>
+<span num="20">        wg.Add(1)</span>
+<span num="21">        go ProcessString(&amp;wg, item)</span>
+<span num="22">    }</span>
+<span num="23">    wg.Wait()</span>
+<span num="24">}</span>
+</pre>
+
+
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Interested in language design?</h3>
+        <p class="link"><a href="https://golang.org/ref/spec" target="_blank">golang.org/ref/spec</a></p>
+<div class="image">
+  <img src="./index_files/spec.png" width="1000">
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h2>Library demos</h2>
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP</h3>
+        
+  <div class="code playground">
+
+
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "fmt"</span>
+<span num="5">    "log"</span>
+<span num="6">    "net/http"</span>
+<span num="7">)</span>
+<span num="8"></span>
+<span num="9">func main() {</span>
+<span num="10">    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {</span>
+<span num="11">        fmt.Fprintf(w, "Hello! Your remote address is: %s\n", r.RemoteAddr)</span>
+<span num="12">    })</span>
+<span num="13">    log.Println("Starting server on http://localhost:8000")</span>
+<span num="14">    log.Fatal(http.ListenAndServe(":8000", nil))</span>
+<span num="15">}</span>
+</pre>
+
+
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP (serve content)</h3>
+        
+  <div class="code playground">
+
+
+<pre><span num="1">package main</span>
+<span num="2"></span>
+<span num="3">import (</span>
+<span num="4">    "log"</span>
+<span num="5">    "net/http"</span>
+<span num="6">)</span>
+<span num="7"></span>
+<span num="8">func main() {</span>
+<span num="9">    // Assumes we are running from the repo root</span>
+<span num="10">    fs := http.Dir("03-http-html/static")</span>
+<span num="11">    http.Handle("/", http.FileServer(fs))</span>
+<span num="12">    log.Println("Starting server on http://localhost:8000")</span>
+<span num="13">    log.Fatal(http.ListenAndServe(":8000", nil))</span>
+<span num="14">}</span>
+</pre>
+
+
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP (handle form)</h3>
+        
+  <div class="code">
+
+
+<pre><span num="14">                &lt;form class="form" method="post" action="/form"&gt;</span>
+<span num="15">                    &lt;label&gt;</span>
+<span num="16">                        How many widgets you want to order?</span>
+<span num="17">                        &lt;input type="number" name="count" class="form-control" value="1"&gt;</span>
+<span num="18">                    &lt;/label&gt;</span>
+<span num="19">                    &lt;input type="submit" value="Buy" class="btn btn-primary"&gt;</span>
+<span num="20">                &lt;/form&gt;</span>
+</pre>
+
+
+</div>
+
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
+
+func main() {
+</span></pre>
+
+<pre><span num="11">    http.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {</span>
+<span num="12">        count := r.FormValue("count")</span>
+<span num="13">        fmt.Fprintf(w, "%s widgets have been ordered!\n", count)</span>
+<span num="14">    })</span>
+<span num="15">    // Assumes we are running from the repo root</span>
+<span num="16">    fs := http.Dir("04-http-form/static")</span>
+<span num="17">    http.Handle("/", http.FileServer(fs))</span>
+</pre>
+
+<pre style="display: none"><span>	log.Println("Starting server on http://localhost:8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+</span></pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>HTTP (WebSocket)</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"log"
+	"net/http"
+	"sync"
+
+	"github.com/gorilla/websocket"
+)
+
+func broadcast(mu *sync.Mutex, c map[*websocket.Conn]bool, typ int, data []byte) {
+	mu.Lock()
+	defer mu.Unlock()
+
+	for client := range c {
+		go client.WriteMessage(typ, data)
+	}
+}
+
+func main() {
+</span></pre>
+
+<pre><span num="22">    var upgrader = websocket.Upgrader{</span>
+<span num="23">        CheckOrigin: func(*http.Request) bool { return true },</span>
+<span num="24">    }</span>
+<span num="25">    var connectionsMu sync.Mutex</span>
+<span num="26">    connections := make(map[*websocket.Conn]bool)</span>
+<span num="27">    http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {</span>
+<span num="28">        conn, err := upgrader.Upgrade(w, r, nil)</span>
+<span num="29">        if err != nil {</span>
+<span num="30">            return // Unable to upgrade connection</span>
+<span num="31">        }</span>
+<span num="32">        connections[conn] = true</span>
+<span num="33">        defer func() {</span>
+<span num="34">            conn.Close()</span>
+<span num="35">            delete(connections, conn)</span>
+<span num="36">        }()</span>
+<span num="37"></span>
+<span num="38">        for {</span>
+<span num="39">            typ, data, err := conn.ReadMessage()</span>
+<span num="40">            if err != nil {</span>
+<span num="41">                return</span>
+<span num="42">            }</span>
+<span num="43">            broadcast(&amp;connectionsMu, connections, typ, data)</span>
+<span num="44">        }</span>
+<span num="45">    })</span>
+</pre>
+
+<pre style="display: none"><span>	// Assumes we are running from the repo root
+	fs := http.Dir("05-http-websocket/static")
+	http.Handle("/", http.FileServer(fs))
+	log.Println("Starting server on http://localhost:8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+</span></pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Database access</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"database/sql"
+	"fmt"
+	"log"
+
+	_ "github.com/mattn/go-sqlite3"
+)
+
+func main() {
+</span></pre>
+
+<pre><span num="13">    db, err := sql.Open("sqlite3", "06-database/chinook.sqlite")</span>
+<span num="14">    if err != nil {</span>
+<span num="15">        log.Fatal(err)</span>
+<span num="16">    }</span>
+<span num="17">    defer db.Close()</span>
+<span num="18"></span>
+<span num="19">    var name string</span>
+<span num="20">    var sum float64</span>
+<span num="21"></span>
+<span num="22">    err = db.QueryRow(`</span>
+<span num="23">            SELECT</span>
+<span num="24">                Customer.FirstName || " " || Customer.LastName,</span>
+<span num="25">                Invoice.Total</span>
+<span num="26">            FROM Invoice</span>
+<span num="27">            LEFT JOIN Customer</span>
+<span num="28">                ON Invoice.CustomerId = Customer.CustomerId</span>
+<span num="29">            ORDER BY Total DESC</span>
+<span num="30">            LIMIT 1</span>
+<span num="31">        `).</span>
+<span num="32">        Scan(&amp;name, &amp;sum)</span>
+<span num="33">    if err != nil {</span>
+<span num="34">        log.Fatal(err)</span>
+<span num="35">    }</span>
+<span num="36">    fmt.Printf("%s had the largest order of $%.02f\n", name, sum)</span>
+</pre>
+
+<pre style="display: none"><span>}
+</span></pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>JSON APIs</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"log"
+	"net/http"
+	"encoding/json"
+)
+
+func main() {
+</span></pre>
+
+<pre><span num="11">    type Tag struct {</span>
+<span num="12">        Tag    string  `json:"tag"`</span>
+<span num="13">        Weight float32 `json:"weight"`</span>
+<span num="14">    }</span>
+<span num="15">    type InfoResponse struct {</span>
+<span num="16">        Name string `json:"name"`</span>
+<span num="17">        Tags []*Tag `json:"tags"`</span>
+<span num="18">    }</span>
+<span num="19">    http.HandleFunc("/api/v1/info", func(w http.ResponseWriter, r *http.Request) {</span>
+<span num="20">        info := &amp;InfoResponse{</span>
+<span num="21">            Name: "CEWIT",</span>
+<span num="22">            Tags: []*Tag{</span>
+<span num="23">                {"Go", 1.0}, {"HTTP", 0.64}, {"JSON", 0.4},</span>
+<span num="24">            },</span>
+<span num="25">        }</span>
+<span num="26">        b, err := json.Marshal(info)</span>
+<span num="27">        if err != nil {</span>
+<span num="28">            http.Error(w, err.Error(), http.StatusInternalServerError)</span>
+<span num="29">            return</span>
+<span num="30">        }</span>
+<span num="31">        w.Header().Set("Content-type", "application/json")</span>
+<span num="32">        w.Write(b)</span>
+<span num="33">    })</span>
+</pre>
+
+<pre style="display: none"><span>	log.Println("Starting server on http://localhost:8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
+}
+</span></pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>P2P communication</h3>
+        
+  <div class="code">
+
+
+<pre><span num="12">    node, _ := dht.New(nil) // TODO: error check</span>
+<span num="13">    node.Start()            // TODO: error check</span>
+<span num="14"></span>
+<span num="15">    dataHash, _ := dht.DecodeInfoHash(`13c6d46f99e6e849176485ba5c8d5ab460f9eccc`)</span>
+<span num="16">    go func() {</span>
+<span num="17">        ticker := time.NewTicker(time.Second * 5)</span>
+<span num="18">        defer ticker.Stop()</span>
+<span num="19"></span>
+<span num="20">        for {</span>
+<span num="21">            log.Println("Requesting peers")</span>
+<span num="22">            node.PeersRequest(string(dataHash), true)</span>
+<span num="23">            &lt;-ticker.C</span>
+<span num="24">        }</span>
+<span num="25">    }()</span>
+<span num="26">    for results := range node.PeersRequestResults {</span>
+<span num="27">        for hash, peers := range results {</span>
+<span num="28">            if hash != dataHash {</span>
+<span num="29">                continue</span>
+<span num="30">            }</span>
+<span num="31">            for _, peer := range peers {</span>
+<span num="32">                log.Printf("Found peer: %s\n", dht.DecodePeerAddress(peer))</span>
+<span num="33">            }</span>
+<span num="34">        }</span>
+<span num="35">    }</span>
+</pre>
+
+
+</div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Site scraping</h3>
+        
+  <div class="code playground">
+<pre style="display: none"><span>package main
+
+import (
+	"fmt"
+	"log"
+	"os"
+
+	"github.com/PuerkitoBio/goquery"
+)
+
+func main() {
+	var (
+		doc *goquery.Document
+		err error
+	)
+
+	// Offline cache in case of network issues
+	f, err := os.Open("08-scraping/cache.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+	doc, err = goquery.NewDocumentFromReader(f)
+
+</span></pre>
+
+<pre><span num="26">    // doc, err = goquery.NewDocument("http://hack.cewit.org/")</span>
+<span num="27">    if err != nil {</span>
+<span num="28">        log.Fatal(err)</span>
+<span num="29">    }</span>
+<span num="30">    s := doc.Find(`h1`).</span>
+<span num="31">        FilterFunction(func(i int, s *goquery.Selection) bool {</span>
+<span num="32">            return s.Text() == "Prizes"</span>
+<span num="33">        }).</span>
+<span num="34">        First().</span>
+<span num="35">        Closest("section").</span>
+<span num="36">        Find("div.slick-track &gt; div &gt; h3")</span>
+<span num="37"></span>
+<span num="38">    prizes := make(map[string]bool, s.Length())</span>
+<span num="39">    s.Each(func(i int, s *goquery.Selection) {</span>
+<span num="40">        prizes[s.Text()] = true</span>
+<span num="41">    })</span>
+<span num="42">    for prize := range prizes {</span>
+<span num="43">        fmt.Println(prize)</span>
+<span num="44">    }</span>
+</pre>
+
+<pre style="display: none"><span>}
+</span></pre>
+</div><div class="buttons"><button class="run">Run</button></div><div class="ui-resizable output" style="display: none;"><div class="ui-resizable-handle ui-resizable-n" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-w" style="z-index: 90; display: block;"></div><div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90; display: block;"></div><div class="buttons"><button class="run">Run</button><button class="kill">Kill</button><button class="close">Close</button></div><pre></pre></div>
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Helpful Go resources</h3>
+        
+  <ul>
+  
+    <li><a href="https://tour.golang.org/" target="_blank">tour.golang.org</a></li>
+  
+  </ul>
+
+  
+  <p>
+    Step-by-step interactive Go tutorial
+  </p>
+  
+
+  <ul>
+  
+    <li><a href="https://gobyexample.com/" target="_blank">gobyexample.com</a></li>
+  
+  </ul>
+
+  
+  <p>
+    Examples of common actions in Go
+  </p>
+  
+
+  <ul>
+  
+    <li><a href="https://learnxinyminutes.com/docs/go" target="_blank">learnxinyminutes.com/docs/go</a></li>
+  
+  </ul>
+
+  
+  <p>
+    "Cheatsheet", helpful if comfortable in other languages
+  </p>
+  
+
+  <ul>
+  
+    <li><a href="https://godoc.org/" target="_blank">godoc.org</a></li>
+  
+  </ul>
+
+  
+  <p>
+    Web-based documentation viewer for built-in and 3rd-party Go packages
+  </p>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Installation instructions (version 1.8+ recommended)</h3>
+        
+  <ul>
+  
+    <li>Windows and OS X: <a href="https://golang.org/dl" target="_blank">golang.org/dl</a></li>
+  
+  </ul>
+
+  <ul>
+  
+    <li>Ubuntu: <a href="https://golang.org/wiki/Ubuntu" target="_blank">golang.org/wiki/Ubuntu</a> (may have to update <code>$PATH</code>)</li>
+  
+  </ul>
+
+  <ul>
+  
+    <li>Other Linux: check your distro's package repository</li>
+  
+  </ul>
+
+  
+  <p>
+    You'll also need <code>git</code> to download 3rd-party packages:
+  </p>
+  
+
+  <ul>
+  
+    <li>Windows and OS X: <a href="https://git-scm.com/" target="_blank">git-scm.com</a></li>
+  
+    <li>Linux: check your distro's package repository</li>
+  
+  </ul>
+
+  
+  <p>
+    Verify your installation by running:
+  </p>
+  
+
+  
+  <div class="code"><pre>%  go version
+go version go1.9.4 linux/amd64
+
+%  git version
+git version 2.7.4</pre></div>
+  
+
+      
+      </article>
+  
+  
+  
+      <article>
+      
+        <h3>Workshop code</h3>
+        
+  
+  <p>
+    GoogleShein23
+  </p>
+  
+
+      
+      </article>
+  
+  
+
+      <article>
+        <h3>Thank you</h3>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    Tim Cooper
+  </p>
+  
+
+  
+  <p>
+    Henry Schein
+  </p>
+  
+<p class="link"><a href="mailto:tim.cooper@layeh.com" target="_blank">tim.cooper@layeh.com</a></p><p class="link"><a href="https://layeh.com/" target="_blank">https://layeh.com</a></p>
+          </div>
+        
+          <div class="presenter">
+            
+  
+  <p>
+    
+  </p>
+  
+
+          </div>
+        
+      </article>
+
+    <div class="slide-area" id="prev-slide-area"></div><div class="slide-area" id="next-slide-area"></div></section>
+
+    <div id="help" style="display: none;">
+      Use the left and right arrow keys or click the left and right
+      edges of the page to navigate between slides.<br>
+      (Press 'H' or navigate to hide this message.)
+    </div>
+
+    
+    <script src="./index_files/play.js"></script>
+    
+
+    <script>
+      (function() {
+        
+        if (window["location"] && window["location"]["hostname"] == "talks.golang.org") {
+          var ga = document.createElement("script"); ga.type = "text/javascript"; ga.async = true;
+          ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";
+          var s = document.getElementsByTagName("script")[0]; s.parentNode.insertBefore(ga, s);
+        }
+      })();
+    </script>
+  
+
+<link rel="stylesheet" type="text/css" href="./index_files/css"><link rel="stylesheet" type="text/css" href="./index_files/styles.css"></body></html>
