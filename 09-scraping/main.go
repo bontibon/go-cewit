@@ -15,7 +15,7 @@ func main() {
 	)
 
 	// Offline cache in case of network issues
-	f, err := os.Open("08-scraping/cache.html")
+	f, err := os.Open("09-scraping/cache.html")
 	if err != nil {
 		log.Fatal(err)
 	}
