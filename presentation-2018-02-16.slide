@@ -70,13 +70,17 @@ https://layeh.com
 
 .play 06-database/main.go /START OMIT/,/END OMIT/
 
+* JSON APIs
+
+.play 07-json/main.go /START OMIT/,/END OMIT/
+
 * P2P communication
 
-.code 07-p2p/main.go /START OMIT/,/END OMIT/
+.code 08-p2p/main.go /START OMIT/,/END OMIT/
 
 * Site scraping
 
-.play 08-scraping/main.go /START OMIT/,/END OMIT/
+.play 09-scraping/main.go /START OMIT/,/END OMIT/
 
 * Helpful Go resources
 
